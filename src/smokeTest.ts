@@ -102,7 +102,33 @@ export async function runSmokeTest() {
             return;
         }
 
-        vscode.window.showInformationMessage('✅ Smoke test PASSED: End-to-end sync and self-packing exclusion verified!');
+        // Test ambiguity logic
+        logger.info('Smoke Test: Testing ambiguity resolution...');
+        await config.update('outputFileName', undefined, vscode.ConfigurationTarget.Workspace);
+        
+        const sig = "This file is a merged representation of the entire codebase, combined into a single document by Repomix.";
+        fs.writeFileSync(path.join(tempDir, 'candidateA.txt'), sig);
+        fs.writeFileSync(path.join(tempDir, 'candidateB.txt'), sig);
+
+        const { resolveOutputFile } = require('./outputFileResolver');
+        
+        let isAmbiguous = true;
+        for (let i = 0; i < 3; i++) {
+            const res = await resolveOutputFile(tempDir);
+            if (res.type !== 'multiple_signatures') {
+                isAmbiguous = false;
+                break;
+            }
+            // Delete one file to test if lock holds across scans
+            if (i === 0) fs.unlinkSync(path.join(tempDir, 'candidateB.txt'));
+        }
+        if (!isAmbiguous) {
+            vscode.window.showErrorMessage('❌ Smoke test FAILED: Ambiguity resolution flip-flopped.');
+            logger.error('Smoke test FAILED (flip-flopping)');
+            return;
+        }
+
+        vscode.window.showInformationMessage('✅ Smoke test PASSED: End-to-end sync, self-packing exclusion, and ambiguity lock verified!');
         logger.info('Smoke test PASSED');
 
     } catch (e) {
