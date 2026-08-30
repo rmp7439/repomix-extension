@@ -5,7 +5,8 @@ import * as path from 'path';
 export async function regenerate(
     workspaceRoot: string,
     tempOutputPath: string,
-    style: string
+    style: string,
+    ignorePatterns: string[] = []
 ): Promise<void> {
     try {
         logger.info(`Running repomix regeneration (style: ${style}) to temp file...`);
@@ -14,6 +15,7 @@ export async function regenerate(
         const options: any = {
             output: tempOutputPath,
             style: style,
+            ignore: ignorePatterns.join(','), // repomix accepts string or array, joining by comma is safe if it's CLI
             quiet: true
         };
         await runCli(['.'], workspaceRoot, options);

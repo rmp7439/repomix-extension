@@ -37,7 +37,7 @@ export async function runRepomixSync(
     const tempFilePath = path.join(folderUri.fsPath, `${outputFileName}.tmp`);
 
     try {
-        await regenerate(folderUri.fsPath, tempFilePath, style);
+        await regenerate(folderUri.fsPath, tempFilePath, style, [outputFileName]);
         const result = writeAtomicallyAndVerify(tempFilePath, finalFilePath);
         if (result) {
             logger.info(`Sync complete. Wrote ${result.size} bytes (hash: ${result.hash})`);
