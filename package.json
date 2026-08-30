@@ -1,0 +1,96 @@
+{
+  "name": "repomix-sync",
+  "displayName": "Repomix Sync",
+  "description": "Automatically regenerate a repomix-packed context file on git push",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "repomixSync.toggle",
+        "title": "Repomix Sync: Toggle"
+      },
+      {
+        "command": "repomixSync.forceRun",
+        "title": "Repomix Sync: Force Regenerate Now"
+      },
+      {
+        "command": "repomixSync.simulateTrigger",
+        "title": "Repomix Sync: Simulate Push Event"
+      },
+      {
+        "command": "repomixSync.showLog",
+        "title": "Repomix Sync: Show Log"
+      },
+      {
+        "command": "repomixSync.runSmokeTest",
+        "title": "Repomix Sync: Run Smoke Test"
+      }
+    ],
+    "configuration": {
+      "title": "Repomix Sync",
+      "properties": {
+        "repomixSync.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable automatic regeneration on git push"
+        },
+        "repomixSync.outputFileName": {
+          "type": "string",
+          "default": "repo.txt",
+          "description": "Filename for the generated context file"
+        },
+        "repomixSync.style": {
+          "type": "string",
+          "enum": ["plain", "xml", "markdown"],
+          "default": "plain",
+          "description": "Output style format"
+        },
+        "repomixSync.remote": {
+          "type": "string",
+          "default": "origin",
+          "description": "Primary remote to watch for pushes"
+        },
+        "repomixSync.debounceMs": {
+          "type": "number",
+          "default": 750,
+          "description": "Debounce window in milliseconds for rapid consecutive pushes"
+        },
+        "repomixSync.notifyOnSync": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show a notification toast in addition to the status bar update"
+        },
+        "repomixSync.autoGitignore": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically offer to add the output file to .gitignore"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/node": "18.x",
+    "typescript": "^5.1.3"
+  },
+  "dependencies": {
+    "repomix": "^0.2.14"
+  }
+}
