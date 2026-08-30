@@ -23,8 +23,8 @@ export async function ensureGitignore(workspaceRoot: string, outputFileName: str
         return;
     }
 
-    const selection = await vscode.window.showInformationMessage(
-        `Would you like to add ${outputFileName} to your .gitignore so it isn't committed?`,
+    const selection = await vscode.window.showWarningMessage(
+        `⚠️ Security Warning: If Repomix's security checks were disabled during generation, sensitive data like API keys could end up committed if pushed. Would you like to add ${outputFileName} to your .gitignore now to prevent this?`,
         'Yes', 'No'
     );
 
