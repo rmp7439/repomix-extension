@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-export type SyncState = 'off' | 'watching' | 'regenerating' | 'synced' | 'error';
+export type SyncState = 'off' | 'watching' | 'regenerating' | 'synced' | 'error' | 'detached' | 'no_remote';
 
 export class StatusBar {
     private statusBarItem: vscode.StatusBarItem;
@@ -35,6 +35,14 @@ export class StatusBar {
             case 'error':
                 this.statusBarItem.text = '$(error) Repomix Sync: Error';
                 this.statusBarItem.tooltip = detail ? `Error: ${detail}` : 'Error during sync';
+                break;
+            case 'detached':
+                this.statusBarItem.text = '$(debug-pause) Repomix Sync: Detached HEAD';
+                this.statusBarItem.tooltip = 'Paused: Detached HEAD state detected';
+                break;
+            case 'no_remote':
+                this.statusBarItem.text = '$(warning) Repomix Sync: No Git Repo';
+                this.statusBarItem.tooltip = 'Waiting for valid .git repository setup';
                 break;
         }
     }

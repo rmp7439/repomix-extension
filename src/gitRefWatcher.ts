@@ -16,7 +16,8 @@ export class GitRefWatcher {
         private readonly workspaceRoot: string,
         private readonly remoteName: string,
         private readonly debounceMs: number,
-        private readonly onPushDetected: (newSha: string) => void
+        private readonly onPushDetected: (newSha: string) => void,
+        private readonly onStatusUpdate: (status: 'watching' | 'detached' | 'no_remote') => void
     ) {}
 
     public activate() {
@@ -43,6 +44,7 @@ export class GitRefWatcher {
         const headPath = this.getGitPath('HEAD');
         if (!fs.existsSync(headPath)) {
             logger.warn(`No .git/HEAD found at ${headPath}`);
+            this.onStatusUpdate('no_remote');
             return;
         }
 
@@ -73,6 +75,7 @@ export class GitRefWatcher {
     private resolveCurrentBranchAndWatch() {
         const headPath = this.getGitPath('HEAD');
         if (!fs.existsSync(headPath)) {
+            this.onStatusUpdate('no_remote');
             return;
         }
 
@@ -83,11 +86,13 @@ export class GitRefWatcher {
                 if (branchName !== this.currentBranch) {
                     logger.info(`Switched to branch: ${branchName}`);
                     this.currentBranch = branchName;
+                    this.onStatusUpdate('watching');
                     this.watchRemoteRef(branchName);
                 }
             } else {
                 logger.info(`Detached HEAD detected (or non-branch ref)`);
                 this.currentBranch = null;
+                this.onStatusUpdate('detached');
                 this.disposeRemoteRefWatcher();
             }
         } catch (e) {

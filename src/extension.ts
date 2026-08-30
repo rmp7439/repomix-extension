@@ -65,6 +65,11 @@ export function activate(context: vscode.ExtensionContext) {
                     logger.error('Sync failed', e);
                     statusBar.updateState('error', String(e));
                 }
+            },
+            (status) => {
+                if (config.get<boolean>('enabled', true)) {
+                    statusBar.updateState(status);
+                }
             }
         );
         watcher.activate();
