@@ -59,7 +59,8 @@ export function activate(context: vscode.ExtensionContext) {
                 await runRepomixSync(folder.uri, statusBar, newSha, false);
             },
             (status) => {
-                if (config.get<boolean>('enabled', true)) {
+                const currentConfig = vscode.workspace.getConfiguration('repomixSync');
+                if (currentConfig.get<boolean>('enabled', true)) {
                     statusBar.updateState(status);
                 }
             }
@@ -69,9 +70,10 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     let disposable = vscode.commands.registerCommand('repomixSync.toggle', () => {
-        const current = config.get<boolean>('enabled', true);
-        config.update('enabled', !current, vscode.ConfigurationTarget.Workspace).then(() => {
-            const newState = !current;
+        const currentConfig = vscode.workspace.getConfiguration('repomixSync');
+        const current = currentConfig.get<boolean>('enabled', true);
+        const newState = !current;
+        currentConfig.update('enabled', newState, vscode.ConfigurationTarget.Workspace).then(() => {
             statusBar.updateState(newState ? 'watching' : 'off');
             vscode.window.showInformationMessage(`Repomix Sync ${newState ? 'Enabled' : 'Disabled'}`);
         });
