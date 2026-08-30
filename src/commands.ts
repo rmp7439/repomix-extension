@@ -14,15 +14,29 @@ export async function simulateTrigger(statusBar: StatusBar) {
     await triggerSync(statusBar, 'Simulated SHA-123456');
 }
 
-export async function selectOutputFile(workspaceRoot: string, statusBar: StatusBar) {
-    const uris = await vscode.window.showOpenDialog({
-        canSelectMany: false,
-        openLabel: 'Select Repomix Output File',
-        defaultUri: vscode.Uri.file(workspaceRoot)
-    });
+export async function selectOutputFile(workspaceRoot: string, statusBar: StatusBar, candidates?: string[]) {
+    let selectedPath: string | undefined;
 
-    if (uris && uris.length > 0) {
-        const selectedPath = uris[0].fsPath;
+    if (candidates && candidates.length > 0) {
+        const choice = await vscode.window.showQuickPick(candidates, {
+            placeHolder: 'Multiple repomix files found. Select one to use as the output file:',
+            ignoreFocusOut: true
+        });
+        if (choice) {
+            selectedPath = path.join(workspaceRoot, choice);
+        }
+    } else {
+        const uris = await vscode.window.showOpenDialog({
+            canSelectMany: false,
+            openLabel: 'Select Repomix Output File',
+            defaultUri: vscode.Uri.file(workspaceRoot)
+        });
+        if (uris && uris.length > 0) {
+            selectedPath = uris[0].fsPath;
+        }
+    }
+
+    if (selectedPath) {
         const relativePath = path.relative(workspaceRoot, selectedPath);
         
         // Save to workspace settings

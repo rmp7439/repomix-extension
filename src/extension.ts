@@ -97,7 +97,13 @@ export function activate(context: vscode.ExtensionContext) {
 
     let selectFileDisposable = vscode.commands.registerCommand('repomixSync.selectOutputFile', () => {
         const folder = workspaceFolders[0];
-        selectOutputFile(folder.uri.fsPath, statusBar);
+        resolveOutputFile(folder.uri.fsPath).then(resolved => {
+            if (resolved.type === 'multiple_signatures') {
+                selectOutputFile(folder.uri.fsPath, statusBar, resolved.matches);
+            } else {
+                selectOutputFile(folder.uri.fsPath, statusBar);
+            }
+        });
     });
 
     context.subscriptions.push(disposable, logDisposable, forceRunDisposable, simulateDisposable, smokeTestDisposable, selectFileDisposable, statusBar);

@@ -6,7 +6,7 @@ import { logger } from './logger';
 export type ResolutionResult = 
     | { type: 'success', path: string }
     | { type: 'not_found' }
-    | { type: 'multiple_signatures' };
+    | { type: 'multiple_signatures', matches: string[] };
 
 export async function resolveOutputFile(workspaceRoot: string): Promise<ResolutionResult> {
     // Priority 1: repomix.config.json
@@ -71,7 +71,7 @@ export async function resolveOutputFile(workspaceRoot: string): Promise<Resoluti
         return { type: 'success', path: matches[0] };
     } else if (matches.length > 1) {
         logger.warn(`Multiple files matched the Repomix signature: ${matches.join(', ')}`);
-        return { type: 'multiple_signatures' };
+        return { type: 'multiple_signatures', matches };
     }
 
     return { type: 'not_found' };
