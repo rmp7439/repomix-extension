@@ -8,7 +8,8 @@ The `repomix` library is bundled directly into the extension, so you don't need 
 
 1. Install the Repomix Sync extension.
 2. Open a repository folder in VS Code.
-3. Push to your default remote to automatically generate the context file.
+3. Create your initial output file once, either by running `repomix` yourself (CLI) or via repomix.com, and place it in your workspace root — OR just push once with no existing file and use the "Select Output File" picker prompt that appears.
+4. From then on, every successful push automatically regenerates that same file.
 
 ### How output file detection works
 
