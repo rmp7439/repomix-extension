@@ -16,6 +16,10 @@
   "contributes": {
     "commands": [
       {
+        "command": "repomixSync.selectOutputFile",
+        "title": "Repomix Sync: Select Output File"
+      },
+      {
         "command": "repomixSync.toggle",
         "title": "Repomix Sync: Toggle"
       },
@@ -45,9 +49,12 @@
           "description": "Enable automatic regeneration on git push"
         },
         "repomixSync.outputFileName": {
-          "type": "string",
-          "default": "repo.txt",
-          "description": "Filename for the generated context file"
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "description": "The exact name of the repomix output file (e.g., repo.txt). If not set, the extension will attempt to auto-detect it."
         },
         "repomixSync.style": {
           "type": "string",

@@ -6,6 +6,7 @@ import { forceRun, simulateTrigger } from './commands';
 import { ensureGitignore } from './gitignoreHelper';
 import { runSmokeTest } from './smokeTest';
 import { runRepomixSync } from './syncRunner';
+import { resolveOutputFile } from './outputFileResolver';
 
 export function activate(context: vscode.ExtensionContext) {
     logger.info('Repomix Sync is activating...');
@@ -25,8 +26,28 @@ export function activate(context: vscode.ExtensionContext) {
     const watchers: GitRefWatcher[] = [];
 
     for (const folder of workspaceFolders) {
-        const outputFileName = config.get<string>('outputFileName', 'repo.txt');
-        ensureGitignore(folder.uri.fsPath, outputFileName);
+        // Initial resolution check to update status bar if missing
+        resolveOutputFile(folder.uri.fsPath).then(resolved => {
+            if (resolved.type === 'not_found' || resolved.type === 'multiple_signatures') {
+                statusBar.updateState('no_output_file');
+            } else {
+                ensureGitignore(folder.uri.fsPath, resolved.path);
+            }
+        });
+
+        // Watch for root-level config or output file creations
+        const rootWatcher = vscode.workspace.createFileSystemWatcher(
+            new vscode.RelativePattern(folder, '*{.txt,.xml,.md,.json}')
+        );
+        rootWatcher.onDidCreate(() => {
+            resolveOutputFile(folder.uri.fsPath).then(resolved => {
+                if (resolved.type === 'success') {
+                    statusBar.updateState('watching');
+                    ensureGitignore(folder.uri.fsPath, resolved.path);
+                }
+            });
+        });
+        context.subscriptions.push(rootWatcher);
 
         const watcher = new GitRefWatcher(
             folder.uri.fsPath,

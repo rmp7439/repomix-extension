@@ -31,7 +31,10 @@ export async function runSmokeTest() {
         cp.execSync('git commit -m "initial commit"', { cwd: tempDir });
         cp.execSync('git branch -M main', { cwd: tempDir });
 
-        const outputFileName = vscode.workspace.getConfiguration('repomixSync').get<string>('outputFileName', 'repo.txt');
+        const config = vscode.workspace.getConfiguration('repomixSync');
+        await config.update('outputFileName', 'repo.txt', vscode.ConfigurationTarget.Workspace);
+        
+        const outputFileName = 'repo.txt';
         const finalFilePath = path.join(tempDir, outputFileName);
         
         // Extension now requires the file to exist first

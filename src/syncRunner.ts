@@ -5,6 +5,7 @@ import { logger } from './logger';
 import { StatusBar } from './statusBar';
 import { regenerate } from './regenerate';
 import { writeAtomicallyAndVerify } from './outputWriter';
+import { resolveOutputFile } from './outputFileResolver';
 
 export async function runRepomixSync(
     folderUri: vscode.Uri,
@@ -19,18 +20,22 @@ export async function runRepomixSync(
         return;
     }
 
-    const outputFileName = config.get<string>('outputFileName', 'repo.txt');
-    const style = config.get<string>('style', 'plain');
-    const finalFilePath = path.join(folderUri.fsPath, outputFileName);
-    
-    if (!fs.existsSync(finalFilePath)) {
-        const msg = `Output file ${outputFileName} not found — run repomix once manually to create it.`;
+    const resolved = await resolveOutputFile(folderUri.fsPath);
+    if (resolved.type === 'not_found' || resolved.type === 'multiple_signatures') {
+        const msg = resolved.type === 'not_found' 
+            ? 'No Repomix output file found. Run repomix once or click the status bar to select.'
+            : 'Multiple repomix files found. Click the status bar to select the correct one.';
         logger.warn(msg);
+        statusBar.updateState('no_output_file');
         if (isManual) {
             vscode.window.showWarningMessage(msg);
         }
         return;
     }
+
+    const outputFileName = resolved.path;
+    const style = config.get<string>('style', 'plain');
+    const finalFilePath = path.join(folderUri.fsPath, outputFileName);
 
     statusBar.updateState('regenerating');
 

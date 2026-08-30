@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import * as path from 'path';
 import { logger } from './logger';
 import { StatusBar } from './statusBar';
 import { runRepomixSync } from './syncRunner';
@@ -11,6 +12,27 @@ export async function forceRun(statusBar: StatusBar) {
 export async function simulateTrigger(statusBar: StatusBar) {
     logger.info('Simulate trigger invoked by user');
     await triggerSync(statusBar, 'Simulated SHA-123456');
+}
+
+export async function selectOutputFile(workspaceRoot: string, statusBar: StatusBar) {
+    const uris = await vscode.window.showOpenDialog({
+        canSelectMany: false,
+        openLabel: 'Select Repomix Output File',
+        defaultUri: vscode.Uri.file(workspaceRoot)
+    });
+
+    if (uris && uris.length > 0) {
+        const selectedPath = uris[0].fsPath;
+        const relativePath = path.relative(workspaceRoot, selectedPath);
+        
+        // Save to workspace settings
+        const config = vscode.workspace.getConfiguration('repomixSync');
+        await config.update('outputFileName', relativePath, vscode.ConfigurationTarget.Workspace);
+        
+        logger.info(`Output file set to ${relativePath} via user selection`);
+        vscode.window.showInformationMessage(`Repomix Sync output file set to ${relativePath}`);
+        statusBar.updateState('watching');
+    }
 }
 
 async function triggerSync(statusBar: StatusBar, shaSim: string) {

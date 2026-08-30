@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-export type SyncState = 'off' | 'watching' | 'regenerating' | 'synced' | 'error' | 'detached' | 'no_remote';
+export type SyncState = 'off' | 'watching' | 'regenerating' | 'synced' | 'error' | 'detached' | 'no_remote' | 'no_output_file';
 
 export class StatusBar {
     private statusBarItem: vscode.StatusBarItem;
@@ -15,10 +15,18 @@ export class StatusBar {
 
     public updateState(state: SyncState, detail?: string) {
         this.state = state;
+        this.statusBarItem.backgroundColor = undefined;
+        this.statusBarItem.command = 'repomixSync.showLog';
         switch (state) {
             case 'off':
                 this.statusBarItem.text = '$(debug-pause) Repomix Sync: Off';
                 this.statusBarItem.tooltip = 'Repomix Sync is disabled';
+                break;
+            case 'no_output_file':
+                this.statusBarItem.text = '$(warning) Repomix Sync: No output file set — click to select';
+                this.statusBarItem.tooltip = 'Click to select the repomix output file for this workspace.';
+                this.statusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
+                this.statusBarItem.command = 'repomixSync.selectOutputFile';
                 break;
             case 'watching':
                 this.statusBarItem.text = '$(eye) Repomix Sync: Watching';

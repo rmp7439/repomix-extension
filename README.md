@@ -6,6 +6,17 @@ A VS Code extension that automatically regenerates a repomix-packed context file
 
 ![Demo: Git push triggers regeneration](https://via.placeholder.com/800x400.png?text=Demo:+git+push+triggers+repomix)
 
+## Setup
+
+1. Install the Repomix Sync extension.
+2. Open a repository folder in VS Code.
+3. The extension will automatically try to find your repomix output file in this order:
+   - Reading the `repomix.config.json` (if it exists).
+   - Reading the `.vscode/settings.json` workspace setting.
+   - Scanning root `.txt`/`.xml`/`.md` files for the repomix signature.
+   - If it can't find it automatically, the status bar will say `⚠️ No output file set`. Click it to select your file.
+4. (Optional) Run `Repomix Sync: Toggle` to disable/enable.
+
 ## Manual Test Checklist
 
 Anyone installing this extension can verify it themselves using this built-in checklist:
@@ -24,10 +35,9 @@ Alternatively, run the built-in **"Repomix Sync: Run Smoke Test"** command to si
 | Setting | Type | Default | Description |
 |---|---|---|---|
 | `repomixSync.enabled` | `boolean` | `true` | Enable/disable automatic regeneration |
-| `repomixSync.outputFileName` | `string` | `"repo.txt"` | Target output filename |
-| `repomixSync.style` | `"plain"\|"xml"\|"markdown"` | `"plain"` | Repomix style format |
-| `repomixSync.remote` | `string` | `"origin"` | The remote to watch for pushes |
-| `repomixSync.debounceMs` | `number` | `750` | Debounce window (ms) for rapid consecutive pushes |
+| `repomixSync.remote`         | `origin` | The remote to watch for pushes (e.g. origin or upstream) |
+| `repomixSync.outputFileName` | `null` | The exact path of the output file. Set this via the `Select Output File` command or let auto-detection find it. |
+| `repomixSync.debounceMs`     | `750` | Debounce window (ms) for rapid consecutive pushes |
 | `repomixSync.notifyOnSync` | `boolean` | `false` | Show a notification toast when sync completes |
 | `repomixSync.autoGitignore` | `boolean` | `true` | Offer to add output file to `.gitignore` on startup |
 
