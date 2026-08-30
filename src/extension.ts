@@ -6,6 +6,7 @@ import { writeAtomicallyAndVerify } from './outputWriter';
 import { StatusBar } from './statusBar';
 import { forceRun, simulateTrigger } from './commands';
 import { ensureGitignore } from './gitignoreHelper';
+import { runSmokeTest } from './smokeTest';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -97,7 +98,11 @@ export function activate(context: vscode.ExtensionContext) {
         simulateTrigger(statusBar);
     });
 
-    context.subscriptions.push(disposable, logDisposable, forceRunDisposable, simulateDisposable, statusBar);
+    let smokeTestDisposable = vscode.commands.registerCommand('repomixSync.runSmokeTest', () => {
+        runSmokeTest();
+    });
+
+    context.subscriptions.push(disposable, logDisposable, forceRunDisposable, simulateDisposable, smokeTestDisposable, statusBar);
     watchers.forEach(w => context.subscriptions.push(w));
 }
 
