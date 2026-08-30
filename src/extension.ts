@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { GitRefWatcher } from './gitRefWatcher';
 import { logger } from './logger';
 import { StatusBar } from './statusBar';
-import { forceRun, simulateTrigger } from './commands';
+import { forceRun, simulateTrigger, selectOutputFile } from './commands';
 import { ensureGitignore } from './gitignoreHelper';
 import { runSmokeTest } from './smokeTest';
 import { runRepomixSync } from './syncRunner';
@@ -93,7 +93,12 @@ export function activate(context: vscode.ExtensionContext) {
         runSmokeTest();
     });
 
-    context.subscriptions.push(disposable, logDisposable, forceRunDisposable, simulateDisposable, smokeTestDisposable, statusBar);
+    let selectFileDisposable = vscode.commands.registerCommand('repomixSync.selectOutputFile', () => {
+        const folder = workspaceFolders[0];
+        selectOutputFile(folder.uri.fsPath, statusBar);
+    });
+
+    context.subscriptions.push(disposable, logDisposable, forceRunDisposable, simulateDisposable, smokeTestDisposable, selectFileDisposable, statusBar);
     watchers.forEach(w => context.subscriptions.push(w));
 }
 
