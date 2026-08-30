@@ -4,6 +4,7 @@ import { logger } from './logger';
 import { regenerate } from './regenerate';
 import { writeAtomicallyAndVerify } from './outputWriter';
 import { StatusBar } from './statusBar';
+import { forceRun, simulateTrigger } from './commands';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -79,7 +80,15 @@ export function activate(context: vscode.ExtensionContext) {
         logger.show();
     });
 
-    context.subscriptions.push(disposable, logDisposable, statusBar);
+    let forceRunDisposable = vscode.commands.registerCommand('repomixSync.forceRun', () => {
+        forceRun(statusBar);
+    });
+
+    let simulateDisposable = vscode.commands.registerCommand('repomixSync.simulateTrigger', () => {
+        simulateTrigger(statusBar);
+    });
+
+    context.subscriptions.push(disposable, logDisposable, forceRunDisposable, simulateDisposable, statusBar);
     watchers.forEach(w => context.subscriptions.push(w));
 }
 
