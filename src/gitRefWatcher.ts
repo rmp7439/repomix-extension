@@ -146,7 +146,7 @@ export class GitRefWatcher {
                 }
             }
         } catch (e) {
-            // Ignore
+            logger.warn(`Failed to read packed-refs: ${e}`);
         }
         return null;
     }
