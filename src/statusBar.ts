@@ -13,6 +13,10 @@ export class StatusBar {
         this.statusBarItem.show();
     }
 
+    public getState(): SyncState {
+        return this.state;
+    }
+
     public updateState(state: SyncState, detail?: string) {
         this.state = state;
         this.statusBarItem.backgroundColor = undefined;

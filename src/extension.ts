@@ -39,14 +39,18 @@ export function activate(context: vscode.ExtensionContext) {
         const rootWatcher = vscode.workspace.createFileSystemWatcher(
             new vscode.RelativePattern(folder, '*{.txt,.xml,.md,.json}')
         );
-        rootWatcher.onDidCreate(() => {
+        const handleRootChange = () => {
             resolveOutputFile(folder.uri.fsPath).then(resolved => {
                 if (resolved.type === 'success') {
                     statusBar.updateState('watching');
                     ensureGitignore(folder.uri.fsPath, resolved.path);
+                } else if (resolved.type === 'multiple_signatures' || resolved.type === 'not_found') {
+                    statusBar.updateState('no_output_file');
                 }
             });
-        });
+        };
+        rootWatcher.onDidCreate(handleRootChange);
+        rootWatcher.onDidDelete(handleRootChange);
         context.subscriptions.push(rootWatcher);
 
         const watcher = new GitRefWatcher(
@@ -61,6 +65,10 @@ export function activate(context: vscode.ExtensionContext) {
             (status) => {
                 const currentConfig = vscode.workspace.getConfiguration('repomixSync');
                 if (currentConfig.get<boolean>('enabled', true)) {
+                    // Do not override no_output_file with a passive watching state
+                    if (statusBar.getState() === 'no_output_file' && (status === 'watching' || status === 'detached' || status === 'no_remote')) {
+                        return;
+                    }
                     statusBar.updateState(status);
                 }
             }
