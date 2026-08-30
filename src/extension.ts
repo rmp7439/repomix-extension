@@ -1,6 +1,10 @@
 import * as vscode from 'vscode';
 import { GitRefWatcher } from './gitRefWatcher';
 import { logger } from './logger';
+import { regenerate } from './regenerate';
+import { writeAtomicallyAndVerify } from './outputWriter';
+import * as path from 'path';
+import * as fs from 'fs';
 
 export function activate(context: vscode.ExtensionContext) {
     logger.info('Repomix Sync is activating...');
@@ -22,9 +26,29 @@ export function activate(context: vscode.ExtensionContext) {
             folder.uri.fsPath,
             remote,
             debounceMs,
-            (newSha) => {
+            async (newSha) => {
                 logger.info(`Workspace ${folder.name} successfully pushed! New SHA: ${newSha}`);
-                // TODO: Call regeneration logic here
+                
+                const enabled = config.get<boolean>('enabled', true);
+                if (!enabled) {
+                    logger.info('Repomix Sync is disabled. Skipping regeneration.');
+                    return;
+                }
+
+                const outputFileName = config.get<string>('outputFileName', 'repo.txt');
+                const style = config.get<string>('style', 'plain');
+                const finalFilePath = path.join(folder.uri.fsPath, outputFileName);
+                const tempFilePath = path.join(folder.uri.fsPath, `${outputFileName}.tmp`);
+
+                try {
+                    await regenerate(folder.uri.fsPath, tempFilePath, style);
+                    const result = writeAtomicallyAndVerify(tempFilePath, finalFilePath);
+                    if (result) {
+                        logger.info(`Sync complete. Wrote ${result.size} bytes (hash: ${result.hash})`);
+                    }
+                } catch (e) {
+                    logger.error('Sync failed', e);
+                }
             }
         );
         watcher.activate();
