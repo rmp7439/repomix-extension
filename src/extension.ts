@@ -5,6 +5,7 @@ import { regenerate } from './regenerate';
 import { writeAtomicallyAndVerify } from './outputWriter';
 import { StatusBar } from './statusBar';
 import { forceRun, simulateTrigger } from './commands';
+import { ensureGitignore } from './gitignoreHelper';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -25,6 +26,9 @@ export function activate(context: vscode.ExtensionContext) {
     const watchers: GitRefWatcher[] = [];
 
     for (const folder of workspaceFolders) {
+        const outputFileName = config.get<string>('outputFileName', 'repo.txt');
+        ensureGitignore(folder.uri.fsPath, outputFileName);
+
         const watcher = new GitRefWatcher(
             folder.uri.fsPath,
             remote,
