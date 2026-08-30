@@ -33,7 +33,7 @@ Alternatively, run the built-in **"Repomix Sync: Run Smoke Test"** command to si
 
 ## Known Limitations
 
+- **Cloud-Synced Folders (OneDrive/Dropbox) & Remote Filesystems**: Native file system watching is inherently unreliable on network drives, WSL, SSHFS, Docker volumes, and cloud-synced folders (like OneDrive). To solve this, Repomix Sync uses a robust hybrid approach: it watches for native file events and *also* polls the git ref in the background. You can control the polling frequency using the `repomixSync.pollIntervalMs` setting.
 - **Submodules**: Currently ignores submodules. Only the top-level repository's pushes are watched.
-- **Remote Filesystems**: Watching `.git/refs` on network drives, WSL, SSHFS, or Docker volumes relies on native `fs.watch` which may miss events.
 - **Failed Pushes**: The extension listens to the ref changing, so failed/rejected pushes naturally produce no event.
 - **Web**: Does not work on `github.dev` or `vscode.dev` since it requires node file system access.

@@ -19,6 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
     const config = vscode.workspace.getConfiguration('repomixSync');
     const remote = config.get<string>('remote', 'origin');
     const debounceMs = config.get<number>('debounceMs', 750);
+    const pollIntervalMs = config.get<number>('pollIntervalMs', 3000);
 
     const statusBar = new StatusBar();
     const watchers: GitRefWatcher[] = [];
@@ -31,6 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
             folder.uri.fsPath,
             remote,
             debounceMs,
+            pollIntervalMs,
             async (newSha) => {
                 logger.info(`Workspace ${folder.name} successfully pushed! New SHA: ${newSha}`);
                 await runRepomixSync(folder.uri, statusBar, newSha, false);

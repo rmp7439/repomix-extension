@@ -65,6 +65,11 @@
           "default": 750,
           "description": "Debounce window in milliseconds for rapid consecutive pushes"
         },
+        "repomixSync.pollIntervalMs": {
+          "type": "number",
+          "default": 3000,
+          "description": "Interval in milliseconds to poll the git ref file as a backup mechanism (useful for OneDrive/Dropbox synced folders where native watching fails)"
+        },
         "repomixSync.notifyOnSync": {
           "type": "boolean",
           "default": false,

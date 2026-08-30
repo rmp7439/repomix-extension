@@ -16,6 +16,7 @@ export class GitRefWatcher {
         private readonly workspaceRoot: string,
         private readonly remoteName: string,
         private readonly debounceMs: number,
+        private readonly pollIntervalMs: number,
         private readonly onPushDetected: (newSha: string) => void,
         private readonly onStatusUpdate: (status: 'watching' | 'detached' | 'no_remote') => void
     ) {}
@@ -27,12 +28,17 @@ export class GitRefWatcher {
         this.resolveCurrentBranchAndWatch();
     }
 
+    private pollTimer?: NodeJS.Timeout;
+
     public dispose() {
         this.headWatcher?.dispose();
         this.remoteRefWatcher?.dispose();
         this.packedRefsWatcher?.dispose();
         if (this.debounceTimer) {
             clearTimeout(this.debounceTimer);
+        }
+        if (this.pollTimer) {
+            clearInterval(this.pollTimer);
         }
     }
 
@@ -111,14 +117,26 @@ export class GitRefWatcher {
         this.remoteRefWatcher.onDidCreate(() => this.handleRefChange());
         logger.info(`Watching remote ref: ${remoteRefRelativePath}`);
         
+        
         // Initialize current SHA so we don't trigger immediately if it hasn't changed
         this.currentRemoteRefSha = this.readRefSha(branchName);
+        
+        if (this.pollTimer) {
+            clearInterval(this.pollTimer);
+        }
+        this.pollTimer = setInterval(() => {
+            this.handleRefChange('poll');
+        }, this.pollIntervalMs);
     }
 
     private disposeRemoteRefWatcher() {
         if (this.remoteRefWatcher) {
             this.remoteRefWatcher.dispose();
             this.remoteRefWatcher = undefined;
+        }
+        if (this.pollTimer) {
+            clearInterval(this.pollTimer);
+            this.pollTimer = undefined;
         }
     }
 
@@ -158,10 +176,10 @@ export class GitRefWatcher {
 
     private checkPackedRefs() {
         if (!this.currentBranch) return;
-        this.handleRefChange();
+        this.handleRefChange('file watcher');
     }
 
-    private handleRefChange() {
+    private handleRefChange(source: string = 'file watcher') {
         if (!this.currentBranch) return;
 
         if (this.debounceTimer) {
@@ -173,7 +191,7 @@ export class GitRefWatcher {
             const newSha = this.readRefSha(this.currentBranch);
             
             if (newSha && newSha !== this.currentRemoteRefSha) {
-                logger.info(`Push detected! Remote ref changed from ${this.currentRemoteRefSha || 'none'} to ${newSha}`);
+                logger.info(`Push detected via ${source}! Remote ref changed from ${this.currentRemoteRefSha || 'none'} to ${newSha}`);
                 this.currentRemoteRefSha = newSha;
                 this.onPushDetected(newSha);
             }

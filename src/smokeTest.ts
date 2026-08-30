@@ -45,6 +45,7 @@ export async function runSmokeTest() {
             tempDir,
             'origin',
             100, // short debounce
+            500, // short poll interval for tests
             async (newSha) => {
                 pushDetected = true;
                 logger.info(`Smoke Test: Push detected! New SHA: ${newSha}`);
