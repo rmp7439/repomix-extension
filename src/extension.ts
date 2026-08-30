@@ -3,6 +3,7 @@ import { GitRefWatcher } from './gitRefWatcher';
 import { logger } from './logger';
 import { regenerate } from './regenerate';
 import { writeAtomicallyAndVerify } from './outputWriter';
+import { StatusBar } from './statusBar';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -19,6 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
     const remote = config.get<string>('remote', 'origin');
     const debounceMs = config.get<number>('debounceMs', 750);
 
+    const statusBar = new StatusBar();
     const watchers: GitRefWatcher[] = [];
 
     for (const folder of workspaceFolders) {
@@ -35,6 +37,8 @@ export function activate(context: vscode.ExtensionContext) {
                     return;
                 }
 
+                statusBar.updateState('regenerating');
+
                 const outputFileName = config.get<string>('outputFileName', 'repo.txt');
                 const style = config.get<string>('style', 'plain');
                 const finalFilePath = path.join(folder.uri.fsPath, outputFileName);
@@ -45,9 +49,16 @@ export function activate(context: vscode.ExtensionContext) {
                     const result = writeAtomicallyAndVerify(tempFilePath, finalFilePath);
                     if (result) {
                         logger.info(`Sync complete. Wrote ${result.size} bytes (hash: ${result.hash})`);
+                        const time = new Date().toLocaleTimeString();
+                        statusBar.updateState('synced', `at ${time} (SHA: ${newSha.substring(0, 7)})`);
+                        
+                        if (config.get<boolean>('notifyOnSync', false)) {
+                            vscode.window.showInformationMessage(`Repomix Sync complete (SHA: ${newSha.substring(0, 7)})`);
+                        }
                     }
                 } catch (e) {
                     logger.error('Sync failed', e);
+                    statusBar.updateState('error', String(e));
                 }
             }
         );
@@ -56,14 +67,19 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     let disposable = vscode.commands.registerCommand('repomixSync.toggle', () => {
-        vscode.window.showInformationMessage('Repomix Sync Toggled!');
+        const current = config.get<boolean>('enabled', true);
+        config.update('enabled', !current, vscode.ConfigurationTarget.Workspace).then(() => {
+            const newState = !current;
+            statusBar.updateState(newState ? 'watching' : 'off');
+            vscode.window.showInformationMessage(`Repomix Sync ${newState ? 'Enabled' : 'Disabled'}`);
+        });
     });
 
     let logDisposable = vscode.commands.registerCommand('repomixSync.showLog', () => {
         logger.show();
     });
 
-    context.subscriptions.push(disposable, logDisposable);
+    context.subscriptions.push(disposable, logDisposable, statusBar);
     watchers.forEach(w => context.subscriptions.push(w));
 }
 
