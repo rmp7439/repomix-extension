@@ -1,4 +1,4 @@
-# Repomix Sync
+# RepoSync
 
 A VS Code extension that automatically regenerates a repomix-packed context file every time you successfully push to GitHub. It saves you from running manual scripts so you always have a fresh, ready-to-paste context file for LLM tools.
 
@@ -6,7 +6,7 @@ A VS Code extension that automatically regenerates a repomix-packed context file
 
 The `repomix` library is bundled directly into the extension, so you don't need to install the CLI separately.
 
-1. Install the Repomix Sync extension.
+1. Install the RepoSync extension.
 2. Open a repository folder in VS Code.
 3. Create your initial output file once, either by running `repomix` yourself (CLI) or via repomix.com, and place it in your workspace root — OR just push once with no existing file and use the "Select Output File" picker prompt that appears.
 4. From then on, every successful push automatically regenerates that same file.
@@ -35,12 +35,12 @@ The extension automatically tries to find your Repomix output file in this stric
 
 ## Commands
 
-- **Repomix Sync: Toggle**: Enable or disable the automatic background syncing.
-- **Repomix Sync: Force Regenerate Now**: Manually trigger a regeneration right away.
-- **Repomix Sync: Simulate Push Event**: Simulate a push event to test if the watcher and sync logic responds correctly.
-- **Repomix Sync: Show Log**: Open the output channel log to see background events and errors.
-- **Repomix Sync: Select Output File**: Opens a file picker to explicitly choose the output file, overriding auto-detection.
-- **Repomix Sync: Run Smoke Test**: Run a fully automated built-in test suite in a temporary directory to verify the extension end-to-end.
+- **RepoSync: Toggle**: Enable or disable the automatic background syncing.
+- **RepoSync: Force Regenerate Now**: Manually trigger a regeneration right away.
+- **RepoSync: Simulate Push Event**: Simulate a push event to test if the watcher and sync logic responds correctly.
+- **RepoSync: Show Log**: Open the output channel log to see background events and errors.
+- **RepoSync: Select Output File**: Opens a file picker to explicitly choose the output file, overriding auto-detection.
+- **RepoSync: Run Smoke Test**: Run a fully automated built-in test suite in a temporary directory to verify the extension end-to-end.
 
 ## Known Limitations and Design Notes
 
@@ -50,7 +50,7 @@ The extension automatically tries to find your Repomix output file in this stric
 
 ## How to Verify It's Working
 
-You can run the built-in `Repomix Sync: Run Smoke Test` command, or verify it manually with this checklist:
+You can run the built-in `RepoSync: Run Smoke Test` command, or verify it manually with this checklist:
 
 - [ ] Open a git repository in VS Code
 - [ ] Push from VS Code's Source Control UI → file updates
