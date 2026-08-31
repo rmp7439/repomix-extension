@@ -2,7 +2,7 @@
   "name": "reposync",
   "displayName": "RepoSync",
   "description": "Automatically regenerate a repomix-packed context file on git push",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "rmp7439",
   "license": "MIT",
   "repository": {
