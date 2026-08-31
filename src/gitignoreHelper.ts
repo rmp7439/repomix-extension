@@ -30,7 +30,7 @@ export async function ensureGitignore(workspaceRoot: string, outputFileName: str
 
     if (selection === 'Yes') {
         try {
-            fs.appendFileSync(gitignorePath, `\n# Repomix Sync output\n${outputFileName}\n`);
+            fs.appendFileSync(gitignorePath, `\n# RepoSync output\n${outputFileName}\n`);
             logger.info(`Added ${outputFileName} to .gitignore`);
             vscode.window.showInformationMessage(`Added ${outputFileName} to .gitignore`);
         } catch (e) {

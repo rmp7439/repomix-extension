@@ -44,7 +44,7 @@ export async function selectOutputFile(workspaceRoot: string, statusBar: StatusB
         await config.update('outputFileName', relativePath, vscode.ConfigurationTarget.Workspace);
         
         logger.info(`Output file set to ${relativePath} via user selection`);
-        vscode.window.showInformationMessage(`Repomix Sync output file set to ${relativePath}`);
+        vscode.window.showInformationMessage(`RepoSync output file set to ${relativePath}`);
         statusBar.updateState('watching');
     }
 }
@@ -52,7 +52,7 @@ export async function selectOutputFile(workspaceRoot: string, statusBar: StatusB
 async function triggerSync(statusBar: StatusBar, shaSim: string) {
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (!workspaceFolders || workspaceFolders.length === 0) {
-        vscode.window.showErrorMessage('No workspace folder found to run Repomix Sync.');
+        vscode.window.showErrorMessage('No workspace folder found to run RepoSync.');
         return;
     }
     const folder = workspaceFolders[0];

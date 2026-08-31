@@ -16,7 +16,7 @@ export async function runRepomixSync(
     const config = vscode.workspace.getConfiguration('repomixSync');
     const enabled = config.get<boolean>('enabled', true);
     if (!enabled && !isManual) {
-        logger.info('Repomix Sync is disabled. Skipping regeneration.');
+        logger.info('RepoSync is disabled. Skipping regeneration.');
         return;
     }
 
@@ -50,14 +50,14 @@ export async function runRepomixSync(
             statusBar.updateState('synced', `at ${time} (SHA: ${newSha.substring(0, 7)})`);
             
             if (isManual || config.get<boolean>('notifyOnSync', false)) {
-                vscode.window.showInformationMessage(`Repomix Sync complete (SHA: ${newSha.substring(0, 7)})`);
+                vscode.window.showInformationMessage(`RepoSync complete (SHA: ${newSha.substring(0, 7)})`);
             }
         }
     } catch (e) {
         logger.error('Sync failed', e);
         statusBar.updateState('error', String(e));
         if (isManual) {
-            vscode.window.showErrorMessage(`Repomix Sync failed: ${e}`);
+            vscode.window.showErrorMessage(`RepoSync failed: ${e}`);
         }
     }
 }

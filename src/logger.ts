@@ -5,7 +5,7 @@ class Logger {
     private channel: vscode.OutputChannel;
 
     constructor() {
-        this.channel = vscode.window.createOutputChannel('Repomix Sync');
+        this.channel = vscode.window.createOutputChannel('RepoSync');
     }
 
     private log(level: string, message: string) {

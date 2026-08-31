@@ -9,7 +9,7 @@ import { runRepomixSync } from './syncRunner';
 import { resolveOutputFile } from './outputFileResolver';
 
 export function activate(context: vscode.ExtensionContext) {
-    logger.info('Repomix Sync is activating...');
+    logger.info('RepoSync is activating...');
 
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (!workspaceFolders || workspaceFolders.length === 0) {
@@ -83,7 +83,7 @@ export function activate(context: vscode.ExtensionContext) {
         const newState = !current;
         currentConfig.update('enabled', newState, vscode.ConfigurationTarget.Workspace).then(() => {
             statusBar.updateState(newState ? 'watching' : 'off');
-            vscode.window.showInformationMessage(`Repomix Sync ${newState ? 'Enabled' : 'Disabled'}`);
+            vscode.window.showInformationMessage(`RepoSync ${newState ? 'Enabled' : 'Disabled'}`);
         });
     });
 

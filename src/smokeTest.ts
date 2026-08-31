@@ -9,7 +9,7 @@ import { runRepomixSync } from './syncRunner';
 import { StatusBar } from './statusBar';
 
 export async function runSmokeTest() {
-    vscode.window.showInformationMessage('Starting Repomix Sync Smoke Test...');
+    vscode.window.showInformationMessage('Starting RepoSync Smoke Test...');
     logger.info('Starting smoke test...');
 
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'repomix-sync-smoke-'));
