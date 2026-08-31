@@ -23,31 +23,31 @@
     "commands": [
       {
         "command": "repomixSync.selectOutputFile",
-        "title": "Repomix Sync: Select Output File"
+        "title": "RepoSync: Select Output File"
       },
       {
         "command": "repomixSync.toggle",
-        "title": "Repomix Sync: Toggle"
+        "title": "RepoSync: Toggle"
       },
       {
         "command": "repomixSync.forceRun",
-        "title": "Repomix Sync: Force Regenerate Now"
+        "title": "RepoSync: Force Regenerate Now"
       },
       {
         "command": "repomixSync.simulateTrigger",
-        "title": "Repomix Sync: Simulate Push Event"
+        "title": "RepoSync: Simulate Push Event"
       },
       {
         "command": "repomixSync.showLog",
-        "title": "Repomix Sync: Show Log"
+        "title": "RepoSync: Show Log"
       },
       {
         "command": "repomixSync.runSmokeTest",
-        "title": "Repomix Sync: Run Smoke Test"
+        "title": "RepoSync: Run Smoke Test"
       }
     ],
     "configuration": {
-      "title": "Repomix Sync",
+      "title": "RepoSync",
       "properties": {
         "repomixSync.enabled": {
           "type": "boolean",
