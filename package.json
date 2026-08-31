@@ -1,6 +1,6 @@
 {
-  "name": "repomix-sync-vscode",
-  "displayName": "Repomix Sync",
+  "name": "reposync",
+  "displayName": "RepoSync",
   "description": "Automatically regenerate a repomix-packed context file on git push",
   "version": "0.0.1",
   "publisher": "rmp7439",
