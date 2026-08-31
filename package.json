@@ -3,6 +3,12 @@
   "displayName": "Repomix Sync",
   "description": "Automatically regenerate a repomix-packed context file on git push",
   "version": "0.0.1",
+  "publisher": "rmp7439",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rmp7439/repomix-extension.git"
+  },
   "engines": {
     "vscode": "^1.80.0"
   },
