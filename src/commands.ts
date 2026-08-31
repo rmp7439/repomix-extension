@@ -40,7 +40,7 @@ export async function selectOutputFile(workspaceRoot: string, statusBar: StatusB
         const relativePath = path.relative(workspaceRoot, selectedPath);
         
         // Save to workspace settings
-        const config = vscode.workspace.getConfiguration('repomixSync');
+        const config = vscode.workspace.getConfiguration('reposync');
         await config.update('outputFileName', relativePath, vscode.ConfigurationTarget.Workspace);
         
         logger.info(`Output file set to ${relativePath} via user selection`);

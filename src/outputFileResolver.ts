@@ -29,8 +29,8 @@ export async function resolveOutputFile(workspaceRoot: string): Promise<Resoluti
         }
     }
 
-    // Priority 2: Workspace Settings (repomixSync.outputFileName)
-    const config = vscode.workspace.getConfiguration('repomixSync');
+    // Priority 2: Workspace Settings (reposync.outputFileName)
+    const config = vscode.workspace.getConfiguration('reposync');
     const userFileName = config.get<string | null>('outputFileName');
     if (userFileName) {
         // If a user explicitly sets a file, clear any temporary ambiguity lock

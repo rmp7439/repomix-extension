@@ -31,7 +31,7 @@ export async function runSmokeTest() {
         cp.execSync('git commit -m "initial commit"', { cwd: tempDir });
         cp.execSync('git branch -M main', { cwd: tempDir });
 
-        const config = vscode.workspace.getConfiguration('repomixSync');
+        const config = vscode.workspace.getConfiguration('reposync');
         await config.update('outputFileName', 'repo.txt', vscode.ConfigurationTarget.Workspace);
         
         const outputFileName = 'repo.txt';

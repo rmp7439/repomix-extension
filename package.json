@@ -2,7 +2,7 @@
   "name": "reposync",
   "displayName": "RepoSync",
   "description": "Automatically regenerate a repomix-packed context file on git push",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "rmp7439",
   "license": "MIT",
   "repository": {
@@ -22,39 +22,39 @@
   "contributes": {
     "commands": [
       {
-        "command": "repomixSync.selectOutputFile",
+        "command": "reposync.selectOutputFile",
         "title": "RepoSync: Select Output File"
       },
       {
-        "command": "repomixSync.toggle",
+        "command": "reposync.toggle",
         "title": "RepoSync: Toggle"
       },
       {
-        "command": "repomixSync.forceRun",
+        "command": "reposync.forceRun",
         "title": "RepoSync: Force Regenerate Now"
       },
       {
-        "command": "repomixSync.simulateTrigger",
+        "command": "reposync.simulateTrigger",
         "title": "RepoSync: Simulate Push Event"
       },
       {
-        "command": "repomixSync.showLog",
+        "command": "reposync.showLog",
         "title": "RepoSync: Show Log"
       },
       {
-        "command": "repomixSync.runSmokeTest",
+        "command": "reposync.runSmokeTest",
         "title": "RepoSync: Run Smoke Test"
       }
     ],
     "configuration": {
       "title": "RepoSync",
       "properties": {
-        "repomixSync.enabled": {
+        "reposync.enabled": {
           "type": "boolean",
           "default": true,
           "description": "Enable automatic regeneration on git push"
         },
-        "repomixSync.outputFileName": {
+        "reposync.outputFileName": {
           "type": [
             "string",
             "null"
@@ -62,33 +62,33 @@
           "default": null,
           "description": "The exact name of the repomix output file (e.g., repo.txt). If not set, the extension will attempt to auto-detect it."
         },
-        "repomixSync.style": {
+        "reposync.style": {
           "type": "string",
           "enum": ["plain", "xml", "markdown"],
           "default": "plain",
           "description": "Output style format"
         },
-        "repomixSync.remote": {
+        "reposync.remote": {
           "type": "string",
           "default": "origin",
           "description": "Primary remote to watch for pushes"
         },
-        "repomixSync.debounceMs": {
+        "reposync.debounceMs": {
           "type": "number",
           "default": 750,
           "description": "Debounce window in milliseconds for rapid consecutive pushes"
         },
-        "repomixSync.pollIntervalMs": {
+        "reposync.pollIntervalMs": {
           "type": "number",
           "default": 3000,
           "description": "Interval in milliseconds to poll the git ref file as a backup mechanism (useful for OneDrive/Dropbox synced folders where native watching fails)"
         },
-        "repomixSync.notifyOnSync": {
+        "reposync.notifyOnSync": {
           "type": "boolean",
           "default": false,
           "description": "Show a notification toast in addition to the status bar update"
         },
-        "repomixSync.autoGitignore": {
+        "reposync.autoGitignore": {
           "type": "boolean",
           "default": true,
           "description": "Automatically offer to add the output file to .gitignore"

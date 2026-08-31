@@ -18,7 +18,7 @@ export async function ensureGitignore(workspaceRoot: string, outputFileName: str
         }
     }
 
-    const config = vscode.workspace.getConfiguration('repomixSync');
+    const config = vscode.workspace.getConfiguration('reposync');
     if (!config.get<boolean>('autoGitignore', true)) {
         return;
     }

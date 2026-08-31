@@ -13,7 +13,7 @@ export async function runRepomixSync(
     newSha: string,
     isManual: boolean = false
 ) {
-    const config = vscode.workspace.getConfiguration('repomixSync');
+    const config = vscode.workspace.getConfiguration('reposync');
     const enabled = config.get<boolean>('enabled', true);
     if (!enabled && !isManual) {
         logger.info('RepoSync is disabled. Skipping regeneration.');

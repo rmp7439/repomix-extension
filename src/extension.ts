@@ -17,7 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
         return;
     }
 
-    const config = vscode.workspace.getConfiguration('repomixSync');
+    const config = vscode.workspace.getConfiguration('reposync');
     const remote = config.get<string>('remote', 'origin');
     const debounceMs = config.get<number>('debounceMs', 750);
     const pollIntervalMs = config.get<number>('pollIntervalMs', 3000);
@@ -63,7 +63,7 @@ export function activate(context: vscode.ExtensionContext) {
                 await runRepomixSync(folder.uri, statusBar, newSha, false);
             },
             (status) => {
-                const currentConfig = vscode.workspace.getConfiguration('repomixSync');
+                const currentConfig = vscode.workspace.getConfiguration('reposync');
                 if (currentConfig.get<boolean>('enabled', true)) {
                     // Do not override no_output_file with a passive watching state
                     if (statusBar.getState() === 'no_output_file' && (status === 'watching' || status === 'detached' || status === 'no_remote')) {
@@ -77,8 +77,8 @@ export function activate(context: vscode.ExtensionContext) {
         watchers.push(watcher);
     }
 
-    let disposable = vscode.commands.registerCommand('repomixSync.toggle', () => {
-        const currentConfig = vscode.workspace.getConfiguration('repomixSync');
+    let disposable = vscode.commands.registerCommand('reposync.toggle', () => {
+        const currentConfig = vscode.workspace.getConfiguration('reposync');
         const current = currentConfig.get<boolean>('enabled', true);
         const newState = !current;
         currentConfig.update('enabled', newState, vscode.ConfigurationTarget.Workspace).then(() => {
@@ -87,23 +87,23 @@ export function activate(context: vscode.ExtensionContext) {
         });
     });
 
-    let logDisposable = vscode.commands.registerCommand('repomixSync.showLog', () => {
+    let logDisposable = vscode.commands.registerCommand('reposync.showLog', () => {
         logger.show();
     });
 
-    let forceRunDisposable = vscode.commands.registerCommand('repomixSync.forceRun', () => {
+    let forceRunDisposable = vscode.commands.registerCommand('reposync.forceRun', () => {
         forceRun(statusBar);
     });
 
-    let simulateDisposable = vscode.commands.registerCommand('repomixSync.simulateTrigger', () => {
+    let simulateDisposable = vscode.commands.registerCommand('reposync.simulateTrigger', () => {
         simulateTrigger(statusBar);
     });
 
-    let smokeTestDisposable = vscode.commands.registerCommand('repomixSync.runSmokeTest', () => {
+    let smokeTestDisposable = vscode.commands.registerCommand('reposync.runSmokeTest', () => {
         runSmokeTest();
     });
 
-    let selectFileDisposable = vscode.commands.registerCommand('repomixSync.selectOutputFile', () => {
+    let selectFileDisposable = vscode.commands.registerCommand('reposync.selectOutputFile', () => {
         const folder = workspaceFolders[0];
         resolveOutputFile(folder.uri.fsPath).then(resolved => {
             if (resolved.type === 'multiple_signatures') {

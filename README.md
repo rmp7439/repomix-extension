@@ -25,13 +25,13 @@ The extension automatically tries to find your Repomix output file in this stric
 
 | Setting | Type | Default | Description |
 |---|---|---|---|
-| `repomixSync.enabled` | `boolean` | `true` | Enable/disable automatic regeneration on git push |
-| `repomixSync.remote` | `string` | `"origin"` | Primary remote to watch for pushes |
-| `repomixSync.debounceMs` | `number` | `750` | Debounce window in milliseconds for rapid consecutive pushes |
-| `repomixSync.pollIntervalMs` | `number` | `3000` | Interval in milliseconds to poll the git ref file as a backup mechanism (useful for OneDrive/Dropbox synced folders where native watching fails) |
-| `repomixSync.notifyOnSync` | `boolean` | `false` | Show a notification toast in addition to the status bar update |
-| `repomixSync.autoGitignore` | `boolean` | `true` | Automatically offer to add the output file to .gitignore |
-| `repomixSync.outputFileName` | `string` | `null` | The exact path of the repomix output file. If not set, the extension attempts auto-detection. |
+| `reposync.enabled` | `boolean` | `true` | Enable/disable automatic regeneration on git push |
+| `reposync.remote` | `string` | `"origin"` | Primary remote to watch for pushes |
+| `reposync.debounceMs` | `number` | `750` | Debounce window in milliseconds for rapid consecutive pushes |
+| `reposync.pollIntervalMs` | `number` | `3000` | Interval in milliseconds to poll the git ref file as a backup mechanism (useful for OneDrive/Dropbox synced folders where native watching fails) |
+| `reposync.notifyOnSync` | `boolean` | `false` | Show a notification toast in addition to the status bar update |
+| `reposync.autoGitignore` | `boolean` | `true` | Automatically offer to add the output file to .gitignore |
+| `reposync.outputFileName` | `string` | `null` | The exact path of the repomix output file. If not set, the extension attempts auto-detection. |
 
 ## Commands
 
@@ -44,7 +44,7 @@ The extension automatically tries to find your Repomix output file in this stric
 
 ## Known Limitations and Design Notes
 
-- **Cloud-Synced Folders**: Native file-system watching can be extremely unreliable in cloud-synced folders (OneDrive, Dropbox, Google Drive). This is why a polling fallback exists alongside the native watcher (configurable via `repomixSync.pollIntervalMs`).
+- **Cloud-Synced Folders**: Native file-system watching can be extremely unreliable in cloud-synced folders (OneDrive, Dropbox, Google Drive). This is why a polling fallback exists alongside the native watcher (configurable via `reposync.pollIntervalMs`).
 - **Submodules**: Submodules aren't specially handled in v1. Only the top-level repository's pushes are watched.
 - **Security Warning**: If Repomix's security checks were disabled during generation, sensitive data like API keys could end up committed. This is why the extension prominently warns and prompts to add your output file to `.gitignore` the first time it detects a new output file.
 

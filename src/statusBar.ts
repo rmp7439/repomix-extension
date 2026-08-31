@@ -8,7 +8,7 @@ export class StatusBar {
 
     constructor() {
         this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
-        this.statusBarItem.command = 'repomixSync.showLog';
+        this.statusBarItem.command = 'reposync.showLog';
         this.updateState('watching');
         this.statusBarItem.show();
     }
@@ -20,7 +20,7 @@ export class StatusBar {
     public updateState(state: SyncState, detail?: string) {
         this.state = state;
         this.statusBarItem.backgroundColor = undefined;
-        this.statusBarItem.command = 'repomixSync.showLog';
+        this.statusBarItem.command = 'reposync.showLog';
         switch (state) {
             case 'off':
                 this.statusBarItem.text = '$(debug-pause) RepoSync: Off';
@@ -30,7 +30,7 @@ export class StatusBar {
                 this.statusBarItem.text = '$(warning) RepoSync: No output file set — click to select';
                 this.statusBarItem.tooltip = 'Click to select the repomix output file for this workspace.';
                 this.statusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
-                this.statusBarItem.command = 'repomixSync.selectOutputFile';
+                this.statusBarItem.command = 'reposync.selectOutputFile';
                 break;
             case 'watching':
                 this.statusBarItem.text = '$(eye) RepoSync: Watching';
