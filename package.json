@@ -1,5 +1,5 @@
 {
-  "name": "repomix-sync",
+  "name": "repomix-sync-vscode",
   "displayName": "Repomix Sync",
   "description": "Automatically regenerate a repomix-packed context file on git push",
   "version": "0.0.1",
