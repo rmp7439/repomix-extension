@@ -1,0 +1,12 @@
+.vscode/**
+.vscode-test/**
+out/**/*.map
+out/**/*.tsbuildinfo
+src/**
+.gitignore
+*.vsix
+**/*.vsix
+node_modules/repomix/repomix-output.xml
+node_modules/repomix/repomix-instruction.md
+node_modules/repomix/llms-install.md
+node_modules/repomix/CLAUDE.md
